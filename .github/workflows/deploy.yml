@@ -15,35 +15,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1️⃣ Checkout
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # 2️⃣ AWS Login (FIXED 🔥)
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    # 🔥 LOGIN (same as your command)
+    # 3️⃣ Login to ECR
     - name: Login to Amazon ECR
       run: |
         aws ecr get-login-password --region $AWS_REGION \
         | docker login --username AWS --password-stdin $ECR_URI
 
-    # 🔥 BUILD
+    # 4️⃣ Build Docker image
     - name: Build Docker image
       run: docker build -t $IMAGE_NAME .
 
-    # 🔥 TAG (with commit id = pro level)
+    # 5️⃣ Tag image (commit version 🔥)
     - name: Tag Docker image
       run: docker tag $IMAGE_NAME:latest $ECR_URI/$IMAGE_NAME:${{ github.sha }}
 
-    # 🔥 PUSH
+    # 6️⃣ Push to ECR
     - name: Push to ECR
       run: docker push $ECR_URI/$IMAGE_NAME:${{ github.sha }}
 
-    # 🔥 UPDATE K8S
+    # 7️⃣ Setup kubeconfig (VERY IMPORTANT 🔥)
+    - name: Setup Kubeconfig
+      run: |
+        echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig
+        export KUBECONFIG=$PWD/kubeconfig
+
+    # 8️⃣ Deploy to Kubernetes
     - name: Deploy to Kubernetes
       run: |
         kubectl set image deployment/todo-app \
