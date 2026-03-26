@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app
+  namespace: dev
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+        - name: todo-container
+          image: 136518012422.dkr.ecr.ap-south-1.amazonaws.com/myapp:latest
+          ports:
+            - containerPort: 3000
