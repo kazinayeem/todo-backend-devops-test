@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>My Todo App</h1>
+      <p class="subtitle">Stay organized and productive</p>
+    </header>
+
+    <div class="input-section">
+      <form id="todoForm">
+        <input 
+          type="text" 
+          id="todoInput" 
+          placeholder="Add a new todo..." 
+          required
+        >
+        <button type="submit" class="add-btn">Add Todo</button>
+      </form>
+    </div>
+
+    <div class="stats">
+      <span>Total: <strong id="totalCount">0</strong></span>
+      <span>Completed: <strong id="completedCount">0</strong></span>
+      <span>Pending: <strong id="pendingCount">0</strong></span>
+    </div>
+
+    <div id="todoList" class="todo-list">
+      <!-- Todos will be populated here -->
+    </div>
+
+    <% if (todos.length === 0) { %>
+      <div class="empty-state">
+        <p>No todos yet. Add one to get started!</p>
+      </div>
+    <% } %>
+
+    <div class="footer">
+      <button id="clearBtn" class="clear-btn">Clear All</button>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>
